@@ -22,8 +22,10 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.util.Random;
 import java.util.UUID;
 
 import br.edu.uepb.nutes.simpleblescanner.database.DBManager;
@@ -172,7 +174,20 @@ public class GattService extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-            Log.d("GattService", "onCharacteristicChanged: " + characteristic.toString());
+            if(characteristic.getValue()[0]==1){
+
+                Intent RTReturn = new Intent(MainActivity.BUTTON_CLICKED);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(RTReturn);
+
+                notifyAboutDeviceClicked();
+            }
+            if(characteristic.getValue()[0]==0) {
+                Intent RTReturn = new Intent(MainActivity.BUTTON_RELEASED);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(RTReturn);
+
+            }
+
+                Log.d("GattService", "onCharacteristicChanged: " + characteristic.toString());
         }
 
         @Override
@@ -182,5 +197,21 @@ public class GattService extends Service {
         }
     };
 
+
+    private void notifyAboutDeviceClicked() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "DEFAULT_NOTIFICATION_CHANEL")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("DEVICE CLICKED")
+                .setContentText("-----------")
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = builder.build();
+
+        if (notificationManager != null) {
+            notificationManager.notify(new Random().nextInt(), notification);
+        }
+    }
 
 }

@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -20,7 +21,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_main" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/scan_fab"
@@ -29,4 +32,14 @@
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_action_ble"
         android:layout_margin="16dp" />
+
+    <ImageView
+        android:id="@+id/physicalButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center"
+        app:srcCompat="@android:drawable/ic_dialog_alert"
+        android:tint="@color/redButtonReleased"
+        />
 </android.support.design.widget.CoordinatorLayout>
